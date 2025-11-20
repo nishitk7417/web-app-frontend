@@ -7,7 +7,7 @@ export default function Tasks() {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("pending");
 
-  // 📌 Fetch all tasks
+  // Fetch all tasks
   async function fetchTasks() {
     const res = await api.get("/tasks");
     setTasks(res.data.data || []);
@@ -17,17 +17,15 @@ export default function Tasks() {
     fetchTasks();
   }, []);
 
-  // 📌 Create Task (Frontend Fix)
+  //  Create Task
   async function createTask(e) {
     e.preventDefault();
     if (!title.trim()) return alert("Title is required");
 
-    // Send only non-empty fields
     const taskData = {
       title,
       description,
       status
-      
     };
     
 
@@ -40,13 +38,13 @@ export default function Tasks() {
     fetchTasks();
   }
 
-  // 📌 Update Task Progress
+  //  Update Task
   async function updateTask(id, newProgress) {
-    await api.patch(`/tasks/${id}`, { status: newProgress });
+    await api.put(`/tasks/${id}`, { status: newProgress });
     fetchTasks();
   }
 
-  // 📌 Delete Task
+  // Delete Task
   async function deleteTask(id) {
     await api.delete(`/tasks/${id}`);
     fetchTasks();
