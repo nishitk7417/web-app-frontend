@@ -1,74 +1,129 @@
-import React, { useEffect, useState } from 'react'
-import api from '../api'
+import React, { useEffect, useState } from "react";
+import api from "../api";
 
-export default function Tasks(){
-  const [tasks, setTasks] = useState([])
-  const [title, setTitle] = useState('')
-  const [desc, setDesc] = useState('')
-  const [q, setQ] = useState('')
+export default function Tasks() {
+  const [tasks, setTasks] = useState([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("pending");
 
-  async function fetchTasks(query=''){
-    const res = await api.get('/tasks', { params: query ? { q: query } : {} })
-    // backend might return tasks array under res.data or res.data.tasks
+  // 📌 Fetch all tasks
+  async function fetchTasks() {
+    const res = await api.get("/tasks");
+    setTasks(res.data.data || []);
+  }
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  // 📌 Create Task (Frontend Fix)
+  async function createTask(e) {
+    e.preventDefault();
+    if (!title.trim()) return alert("Title is required");
+
+    // Send only non-empty fields
+    const taskData = {
+      title,
+      description,
+      status
+      
+    };
     
-    setTasks(res.data.data.tasks || res.data || [])
+
+    await api.post("/tasks", taskData);
+
+    setTitle("");
+    setDescription("");
+    setStatus("pending");
+
+    fetchTasks();
   }
 
-  useEffect(()=>{ fetchTasks() }, [])
-
-  async function createTask(e){
-    e.preventDefault()
-    if(!title) return
-    await api.post('/tasks', { title, description: desc })
-    setTitle(''); setDesc('')
-    fetchTasks()
+  // 📌 Update Task Progress
+  async function updateTask(id, newProgress) {
+    await api.patch(`/tasks/${id}`, { status: newProgress });
+    fetchTasks();
   }
 
-  async function deleteTask(id){
-    if(!confirm('Delete task?')) return
-    await api.delete(`/tasks/${id}`)
-    fetchTasks(q)
-  }
-
-  async function updateStatus(id, status){
-    await api.put(`/tasks/${id}`, { status })
-    fetchTasks(q)
+  // 📌 Delete Task
+  async function deleteTask(id) {
+    await api.delete(`/tasks/${id}`);
+    fetchTasks();
   }
 
   return (
-    <div>
-      <h2 className="text-2xl mb-4">Tasks</h2>
+    <div className="p-6 max-w-xl bg-black/10 text-black rounded mx-auto">
+      <h1 className="text-2xl text-white font-bold mb-4">Tasks</h1>
 
-      <form onSubmit={createTask} className="mb-4 max-w-md">
-        <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" className="p-2 rounded bg-white/5 w-full mb-2" />
-        <textarea value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Description" className="p-2 rounded bg-white/5 w-full mb-2" />
-        <button className="px-4 py-2 bg-white/20 rounded">Add Task</button>
+      {/* Create Task */}
+      <form onSubmit={createTask} className="mb-6 space-y-3">
+        <input
+          className="p-2 w-full bg-gray-200 rounded"
+          placeholder="Task Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+
+        <textarea
+          className="p-2 w-full bg-gray-200 rounded"
+          placeholder="Task Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+
+        <select
+          className="p-2 w-full bg-gray-200 rounded"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="pending">Pending</option>
+          <option value="in-progress">In Progress</option>
+          <option value="completed">Completed</option>
+        </select>
+
+        <button className="px-4 py-2 bg-blue-500 text-white rounded">
+          Add Task
+        </button>
       </form>
 
-      <div className="mb-4">
-        <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search by title" className="p-2 rounded bg-white/5 mr-2" />
-        <button onClick={()=>fetchTasks(q)} className="px-3 py-1 bg-white/20 rounded">Search</button>
-        <button onClick={()=>{ setQ(''); fetchTasks(); }} className="px-3 py-1 ml-2 bg-white/10 rounded">Clear</button>
-      </div>
-
-      <ul className="space-y-2">
-        {tasks.length===0 ? <p>No tasks found</p> : tasks.map(task => (
-          <li key={task._id || task.id} className="bg-white/5 p-3 rounded flex justify-between items-center">
+      {/* Task List */}
+      <div className="space-y-3">
+        <span className="text-xl font-semibold">All tasks:</span>
+        {tasks.map((task) => (
+          <div
+            key={task._id}
+            className="p-3 bg-gray-100 rounded flex justify-between items-center"
+          >
             <div>
-              <div className="font-bold">{task.title}</div>
-              <div className="text-sm">{task.description}</div>
+              <h3 className="text-black-500 font-semibold">{task.title}</h3>
+              <p className="text-sm">{task.description || "No description"}</p>
+              <p className="text-xs text-gray-500">
+                status: {task.status}
+              </p>
             </div>
-            <div className="flex items-center space-x-2">
-              <select value={task.status} onChange={e=>updateStatus(task._id || task.id, e.target.value)} className="p-1 rounded bg-white/10">
+
+            <div className="flex gap-2">
+              <select
+                value={task.status}
+                onChange={(e) => updateTask(task._id, e.target.value)}
+                className="p-1 bg-white border rounded"
+              >
                 <option value="pending">Pending</option>
                 <option value="in-progress">In Progress</option>
                 <option value="completed">Completed</option>
               </select>
-              <button onClick={()=>deleteTask(task._id || task.id)} className="px-2 py-1 rounded bg-red-600/30">Delete</button>
+
+              <button
+                onClick={() => deleteTask(task._id)}
+                className="px-2 py-1 bg-red-500 text-white rounded"
+              >
+                X
+              </button>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
-  )
+  );
 }

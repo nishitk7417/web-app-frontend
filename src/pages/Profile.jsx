@@ -17,7 +17,7 @@ export default function Profile(){
 
   async function save(){
     try{
-      await api.put('/users/updateInfo', form)
+      await api.patch('/users/updateInfo', form)
       setMsg('Saved')
       setTimeout(()=>setMsg(''),2000)
     }catch(err){
@@ -28,9 +28,9 @@ export default function Profile(){
   return (
     <div className="max-w-md mx-auto bg-white/10 p-6 rounded">
       <h2 className="text-2xl mb-4">Profile</h2>
-      <input className="w-full p-2 rounded mb-2 bg-white/5" value={form.name} onChange={e=>setForm({...form, name: e.target.value})} />
-      <input className="w-full p-2 rounded mb-2 bg-white/5" value={form.email} onChange={e=>setForm({...form, email: e.target.value})} />
-      <button onClick={save} className="p-2 bg-white/20 rounded">Save</button>
+      <input className="w-full p-2 rounded text-black mb-2 bg-gray-200" value={form.name} onChange={e=>setForm({...form, name: e.target.value})} />
+      <input className="w-full p-2 rounded text-black mb-2 bg-gray-200" value={form.email} onChange={e=>setForm({...form, email: e.target.value})} />
+      <button onClick={save} className="p-2 bg-gray-200 rounded">Save</button>
       {msg && <div className="mt-2">{msg}</div>}
     </div>
   )

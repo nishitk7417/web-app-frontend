@@ -12,7 +12,7 @@ export default function NavBar(){
 
   return (
     <nav className="p-4 flex justify-between items-center container mx-auto bg-gradient-to-br from-gray-900 via-black to-gray-900">
-      <div className="text-xl font-bold">PrimeTrade</div>
+      <div className="text-xl text-red-400 font-bold">PrimeTrade</div>
       <div className="space-x-4">
         {token ? (
           <>

@@ -10,9 +10,9 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 export default function App(){
   return (
-    <div className="h-screen w-screen text-white flex flex-col">
+    <div className="min-h-screen w-screen text-white flex flex-col">
       <NavBar />
-      <div className="container bg-red-400 h-screen p-4">
+      <div className="container bg-red-400 min-h-screen p-4">
         <Routes>
           <Route path="/" element={<Dashboard/>} />
           <Route path="/login" element={<Login />} />
