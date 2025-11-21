@@ -21,7 +21,7 @@ export default function Dashboard(){
             <h2 className="text-xl">{profile.name || profile?.user?.name}</h2>
             <p className="text-sm">{profile.email || profile?.user?.email}</p>
           </>
-        ) : <p>Loading profile...</p>}
+        ) : <p>LOGIN FIRST</p>}
         <div className="mt-3">
           <Link to="/tasks" className='text-white border px-4 py-2'>Tasks</Link>
         </div>

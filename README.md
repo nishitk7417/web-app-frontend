@@ -1,18 +1,106 @@
-# React + Vite
+# Web-app-taskManager (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple frontend project made using React.js, Vite, and Tailwind CSS.
+It connects with the backend API and provides authentication and task management UI.
 
-Currently, two official plugins are available:
+# Features
+## User Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Register user
 
-## React Compiler
+- Login user
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- Logout user
 
-Note: This will impact Vite dev & build performances.
+- Store JWT in cookies (withCredentials)
 
-## Expanding the ESLint configuration
+- Protected routes
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Redirect after login
+
+## Task Features
+
+- Create Task
+
+- Get All Tasks
+
+- Update Task Status
+
+- Delete Task
+
+## Each task has:
+
+- Title
+
+- Description
+
+- Status (Pending, In-Progress, Completed)
+
+## Tech Used
+
+- React.js
+
+- Vite
+
+- Tailwind CSS
+
+- Axios
+
+- React Router DOM
+
+## How to Run
+
+1. Clone the repo
+
+2. Install dependencies
+
+3. Run the app
+
+```js
+git clone https://github.com/nishitk7417/web-app-frontend.git
+cd web-app-frontend
+npm install
+npm run dev
+```
+## API Setup
+
+All backend calls are made using Axios inside:
+```
+src/api.js
+```
+
+Example:
+```
+const api = axios.create({
+  baseURL: "http://localhost:8000/api/v1",
+  withCredentials: true,
+});
+```
+
+## Pages
+### Register Page
+
+- Allows user to create an account
+
+- Sends name, email, password to backend
+
+### Login Page
+
+- Authenticates user
+
+- Stores token in cookies
+
+### Tasks Page
+
+- Shows all tasks
+
+- Add task
+
+- Edit task status
+
+- Delete task
+
+## Summary
+
+This frontend project provides a clean and simple UI for authentication and task management.
+It is perfect for learning React + full-stack development.
